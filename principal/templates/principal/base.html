@@ -1,0 +1,46 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MiTienda</title>
+  <!-- CSS local -->
+  <link rel="stylesheet" href="{% static 'principal/css/bootstrap.css' %}">
+  <link rel="stylesheet" href="{% static 'principal/css/main.css' %}">
+  <!-- CSS externo si querés -->
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container">
+    <a class="navbar-brand" href="{% url 'principal:index' %}">MiTienda</a>
+    <div class="collapse navbar-collapse">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="{% url 'principal:index' %}">Inicio</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'principal:category' %}">Shop</a></li>
+
+        {% if user.is_authenticated %}
+            {% if user.is_staff %}
+              <li class="nav-item"><a class="nav-link" href="{% url 'admin:index' %}">Panel Admin</a></li>
+            {% elif user.groups.filter(name='Vendedores').exists %}
+              <li class="nav-item"><a class="nav-link" href="{% url 'principal:panel_vendedor' %}">Panel Vendedor</a></li>
+            {% endif %}
+            <li class="nav-item"><a class="nav-link" href="{% url 'principal:logout' %}">Cerrar sesión</a></li>
+        {% else %}
+            <li class="nav-item"><a class="nav-link" href="{% url 'principal:login' %}">Iniciar sesión</a></li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container mt-4">
+  {% block content %}{% endblock %}
+</div>
+
+<!-- JS -->
+<script src="{% static 'principal/js/vendor/jquery-2.2.4.min.js' %}"></script>
+<script src="{% static 'principal/js/vendor/bootstrap.min.js' %}"></script>
+<script src="{% static 'principal/js/main.js' %}"></script>
+</body>
+</html>
